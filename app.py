@@ -1,8 +1,17 @@
 from flask import Flask, request, send_file
 import subprocess
 import os
+import random
 
 app = Flask(__name__)
+
+def get_random_proxy():
+    # Read the proxies from http.txt
+    with open('http.txt', 'r') as file:
+        proxies = file.read().splitlines()
+    
+    # Return a random proxy
+    return random.choice(proxies)
 
 @app.route('/download')
 def download():
@@ -14,9 +23,18 @@ def download():
     # Set the output file path
     output_file = 'video.mp4'
 
+    # Get a random proxy
+    proxy = get_random_proxy()
+    print(f"Using proxy: http://{proxy}")  # Log the proxy being used
+
     try:
-        # Download the video using yt-dlp
-        subprocess.run(['yt-dlp', '-o', output_file, video_url], check=True)
+        # Download the video using yt-dlp with a random proxy
+        subprocess.run([
+            'yt-dlp',
+            '--proxy', f"http://{proxy}",  # Use the random proxy
+            '-o', output_file,
+            video_url
+        ], check=True)
 
         # Send the video file as a response
         return send_file(output_file, as_attachment=True)
