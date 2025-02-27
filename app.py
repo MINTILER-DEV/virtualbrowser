@@ -25,13 +25,13 @@ def download():
 
     # Get a random proxy
     proxy = get_random_proxy()
-    print(f"Using proxy: http://{proxy}")  # Log the proxy being used
+    # print(f"Using proxy: http://{proxy}")  # Log the proxy being used
 
     try:
         # Download the video using yt-dlp with a random proxy
         subprocess.run([
             'yt-dlp',
-            '--proxy', f"http://{proxy}",  # Use the random proxy
+            #'--proxy', f"http://{proxy}",  # Use the random proxy
             '-o', output_file,
             video_url
         ], check=True)
